@@ -388,11 +388,24 @@
     }
 
     .wechat-hint strong { color: var(--ink); }
+
+    .dl-url-box {
+      margin-top: 1rem;
+      padding: 0.75rem 0.9rem;
+      background: rgba(0,0,0,0.22);
+      border: 1px solid rgba(255,255,255,0.2);
+      font-size: 0.72rem;
+      line-height: 1.45;
+      color: rgba(255,255,255,0.88);
+      word-break: break-all;
+    }
+
+    .dl-url-box a { color: var(--gold-light); }
   </style>
 </head>
 <body>
   <p id="wechat-hint" class="wechat-hint" hidden>
-    <strong>微信内打开时</strong>，若按钮无反应，请点右上角 <strong>「…」→ 在浏览器中打开</strong>，再用 Chrome 下载安装。
+    <strong>微信内打开时</strong>，请点右上角 <strong>「…」→ 在浏览器中打开</strong> 后再下载。
   </p>
 
   <!-- Cover -->
@@ -413,17 +426,19 @@
       <div class="cover-cta">
         <a
           class="btn-download"
-          href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk"
-          target="_blank"
-          rel="noopener noreferrer"
-        >下载 Android 版</a>
+          href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/download/v1.1.0/AFSA.apk"
+        >下载 Android 版（v1.1.0）</a>
         <a
           class="btn-ghost"
-          href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest"
+          href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/tag/v1.1.0"
           target="_blank"
           rel="noopener noreferrer"
-        >Release Notes</a>
+        >版本说明</a>
       </div>
+      <p class="dl-url-box">
+        下载地址（可长按复制）：<br />
+        <a href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/download/v1.1.0/AFSA.apk">github.com/…/afsa-android-releases/…/v1.1.0/AFSA.apk</a>
+      </p>
     </div>
 
     <div class="cover-footer">
@@ -489,16 +504,15 @@
       </div>
       <div class="dl-card">
         <p class="label">Android Edition</p>
-        <p class="platform">AFSA.apk</p>
+        <p class="platform">AFSA.apk · v1.1.0 · 约 192MB</p>
         <a
           class="btn-download"
-          href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/download/v1.1.0/AFSA.apk"
         >获取 APK</a>
         <p class="meta">
-          最新版始终指向 Release。<br />
-          <a class="inline" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk" target="_blank" rel="noopener noreferrer">直链</a>
+          若出现 <strong>Page not found</strong>，说明打开了旧地址（私有仓 app_v1）。<br />
+          请用本页按钮，或复制此链接到浏览器：<br />
+          <a class="inline" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/download/v1.1.0/AFSA.apk">v1.1.0 直链</a>
         </p>
       </div>
     </div>
