@@ -137,6 +137,9 @@
       padding: 1rem 1.75rem;
       border: 1px solid var(--cream);
       transition: background 0.2s, color 0.2s, transform 0.2s;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: rgba(196, 165, 116, 0.35);
     }
 
     .btn-download:hover {
@@ -370,11 +373,27 @@
       margin-bottom: 0.5rem;
     }
 
-    footer a { color: var(--green); text-decoration: none; }
+    footer a { color: var(--green); text-decoration: none; touch-action: manipulation; }
     footer a:hover { text-decoration: underline; }
+
+    .wechat-hint {
+      display: none;
+      margin: 0 1.5rem 1rem;
+      padding: 0.85rem 1rem;
+      background: #fff8e8;
+      border: 1px solid #e8d4b8;
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .wechat-hint strong { color: var(--ink); }
   </style>
 </head>
 <body>
+  <p id="wechat-hint" class="wechat-hint" hidden>
+    <strong>微信内打开时</strong>，若按钮无反应，请点右上角 <strong>「…」→ 在浏览器中打开</strong>，再用 Chrome 下载安装。
+  </p>
 
   <!-- Cover -->
   <header class="cover">
@@ -394,12 +413,15 @@
       <div class="cover-cta">
         <a
           class="btn-download"
-          href="https://github.com/ai-agriculture-circuits-and-systems/app_v1/releases/latest/download/AFSA.apk"
-          download="AFSA.apk"
+          href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk"
+          target="_blank"
+          rel="noopener noreferrer"
         >下载 Android 版</a>
         <a
           class="btn-ghost"
-          href="https://github.com/ai-agriculture-circuits-and-systems/app_v1/releases/latest"
+          href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest"
+          target="_blank"
+          rel="noopener noreferrer"
         >Release Notes</a>
       </div>
     </div>
@@ -470,12 +492,13 @@
         <p class="platform">AFSA.apk</p>
         <a
           class="btn-download"
-          href="https://github.com/ai-agriculture-circuits-and-systems/app_v1/releases/latest/download/AFSA.apk"
-          download="AFSA.apk"
+          href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk"
+          target="_blank"
+          rel="noopener noreferrer"
         >获取 APK</a>
         <p class="meta">
           最新版始终指向 Release。<br />
-          <a class="inline" href="https://github.com/ai-agriculture-circuits-and-systems/app_v1/releases/latest/download/AFSA.apk">直链</a>
+          <a class="inline" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk" target="_blank" rel="noopener noreferrer">直链</a>
         </p>
       </div>
     </div>
@@ -484,12 +507,21 @@
   <footer>
     <p class="org">ai-for-smart-agriculture</p>
     <p>
-      <a href="https://github.com/ai-for-smart-agriculture">Organization</a>
+      <a href="https://github.com/ai-for-smart-agriculture" target="_blank" rel="noopener noreferrer">Organization</a>
       ·
-      <a href="https://github.com/ai-agriculture-circuits-and-systems/app_v1">Source · app_v1</a>
+      <a href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest" target="_blank" rel="noopener noreferrer">APK Releases</a>
     </p>
     <p style="margin-top:0.75rem; opacity:0.75">GitHub Pages · 艺术杂志风介绍页</p>
   </footer>
 
+  <script>
+    (function () {
+      var ua = navigator.userAgent || "";
+      if (/MicroMessenger|QQ\//i.test(ua)) {
+        var el = document.getElementById("wechat-hint");
+        if (el) el.hidden = false;
+      }
+    })();
+  </script>
 </body>
 </html>
