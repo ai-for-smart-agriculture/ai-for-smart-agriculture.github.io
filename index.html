@@ -147,6 +147,17 @@
       transform: translateY(-1px);
     }
 
+    .btn-download-intl {
+      background: transparent;
+      color: rgba(255,255,255,0.92);
+      border-color: rgba(255,255,255,0.45);
+    }
+
+    .btn-download-intl:hover {
+      background: rgba(255,255,255,0.12);
+      color: var(--cream);
+    }
+
     .btn-ghost {
       font-size: 0.72rem;
       letter-spacing: 0.18em;
@@ -426,17 +437,25 @@
       <div class="cover-cta">
         <a
           class="btn-download"
+          data-gitee-download
+          href="https://gitee.com/yhlkxkzs/afsa-android-release/releases"
+        >国内下载（推荐）</a>
+        <a
+          class="btn-download btn-download-intl"
           href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk"
-        >下载 Android 版（最新）</a>
+        >国际下载 GitHub</a>
         <a
           class="btn-ghost"
-          href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest"
+          href="https://gitee.com/yhlkxkzs/afsa-android-release/releases"
           target="_blank"
           rel="noopener noreferrer"
         >版本说明</a>
       </div>
       <p class="dl-url-box">
-        下载地址（可长按复制）：<br />
+        国内直链（可长按复制）：<br />
+        <a id="gitee-dl-url" data-gitee-download href="https://gitee.com/yhlkxkzs/afsa-android-release/releases">gitee.com/yhlkxkzs/afsa-android-release/releases</a>
+        <br /><br />
+        国际直链：<br />
         <a href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk">github.com/…/afsa-android-releases/releases/latest/download/AFSA.apk</a>
       </p>
     </div>
@@ -495,7 +514,7 @@
       <div>
         <h2>如何安装</h2>
         <ol>
-          <li>点击右侧 <strong>「获取 APK」</strong>，或封面区的下载按钮。</li>
+          <li>点击右侧 <strong>「国内下载」</strong>（Gitee，无需 VPN）或 <strong>「国际下载」</strong>（GitHub）。</li>
           <li>等待 <strong>AFSA.apk</strong> 下载完成（约 190MB）。</li>
           <li>在下载通知或文件管理中 <strong>打开安装包</strong>。</li>
           <li>若系统拦截「未知来源」，请允许 <strong>本浏览器安装应用</strong> 后重试。</li>
@@ -507,12 +526,20 @@
         <p class="platform">AFSA.apk · 最新 Release · 约 192MB</p>
         <a
           class="btn-download"
+          data-gitee-download
+          href="https://gitee.com/yhlkxkzs/afsa-android-release/releases"
+        >国内下载</a>
+        <a
+          class="btn-download btn-download-intl"
+          style="margin-top:0.65rem"
           href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk"
-        >获取 APK</a>
+        >国际下载 GitHub</a>
         <p class="meta">
-          公开下载仓，无需 GitHub 登录。<br />
-          若出现 <strong>Page not found</strong>，请确认链接含 <strong>afsa-android-releases</strong>（不是 app_v1）。<br />
-          <a class="inline" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk">最新直链</a>
+          国内走 Gitee，无需 VPN；海外/VPN 可用 GitHub 直链。<br />
+          若 GitHub 出现 <strong>Page not found</strong>，请用上方 <strong>国内下载</strong>。<br />
+          <a class="inline" data-gitee-download href="https://gitee.com/yhlkxkzs/afsa-android-release/releases">Gitee 最新</a>
+          ·
+          <a class="inline" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk">GitHub 最新</a>
         </p>
       </div>
     </div>
@@ -523,7 +550,9 @@
     <p>
       <a href="https://github.com/ai-for-smart-agriculture" target="_blank" rel="noopener noreferrer">Organization</a>
       ·
-      <a href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest" target="_blank" rel="noopener noreferrer">APK Releases</a>
+      <a href="https://gitee.com/yhlkxkzs/afsa-android-release/releases" target="_blank" rel="noopener noreferrer">Gitee APK</a>
+      ·
+      <a href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest" target="_blank" rel="noopener noreferrer">GitHub APK</a>
     </p>
     <p style="margin-top:0.75rem; opacity:0.75">GitHub Pages · 艺术杂志风介绍页</p>
   </footer>
@@ -535,6 +564,30 @@
         var el = document.getElementById("wechat-hint");
         if (el) el.hidden = false;
       }
+
+      var fallback = "https://gitee.com/yhlkxkzs/afsa-android-release/releases";
+      fetch("https://gitee.com/api/v5/repos/yhlkxkzs/afsa-android-release/releases/latest")
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (rel) {
+          if (!rel) return;
+          var assets = rel.assets || [];
+          var apk = null;
+          for (var i = 0; i < assets.length; i++) {
+            if (assets[i].name === "AFSA.apk") {
+              apk = assets[i];
+              break;
+            }
+          }
+          var url = (apk && apk.browser_download_url) || rel.html_url || fallback;
+          document.querySelectorAll("[data-gitee-download]").forEach(function (a) {
+            a.href = url;
+          });
+          var urlEl = document.getElementById("gitee-dl-url");
+          if (urlEl) {
+            urlEl.textContent = url.replace(/^https:\/\//, "");
+          }
+        })
+        .catch(function () {});
     })();
   </script>
 </body>
