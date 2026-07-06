@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta id="meta-desc" name="description" content="AFSA — smart agriculture app. Identify crops, manage orchards, download Android APK." />
-  <title id="doc-title">AFSA · Field &amp; Orchard</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta name="version" content="2026-07-06-v2" />
+  <title id="doc-title">AFSA — Smart Agriculture</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
@@ -67,43 +69,32 @@
       background-position: center;
       opacity: 0;
       transition: opacity 1.4s ease-in-out;
-      transform: scale(1.02);
-    }
-
-    .cover-slide.active {
-      opacity: 1;
       transform: scale(1);
-      transition: opacity 1.4s ease-in-out, transform 8s ease-out;
     }
 
-    .cover-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        165deg,
-        rgba(27, 61, 50, 0.78) 0%,
-        rgba(45, 90, 71, 0.58) 38%,
-        rgba(26, 36, 32, 0.88) 100%
-      );
+    .cover-title .cover-sub {
+      display: block;
+      font-family: var(--sans);
+      font-size: 0.46em;
+      font-weight: 400;
+      font-style: normal;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-top: 0.35rem;
+      color: rgba(255, 255, 255, 0.92);
     }
 
-    .carousel-dots {
-      position: absolute;
-      bottom: 5.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
+    .hero-dots {
       display: flex;
       gap: 0.45rem;
-      padding: 0.35rem 0.55rem;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.18);
-      backdrop-filter: blur(4px);
+      align-items: center;
+      margin-top: 1rem;
+      margin-bottom: 0.25rem;
     }
 
-    .carousel-dots button {
-      width: 7px;
-      height: 7px;
+    .hero-dots button {
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       border: none;
       padding: 0;
@@ -112,9 +103,43 @@
       transition: background 0.25s, transform 0.25s;
     }
 
-    .carousel-dots button.active {
+    .hero-dots button.active {
       background: var(--gold-light);
-      transform: scale(1.15);
+      transform: scale(1.2);
+    }
+
+    .hero-slide-label {
+      margin-left: 0.35rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      color: rgba(255, 255, 255, 0.65);
+      text-transform: uppercase;
+    }
+
+    .cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        165deg,
+        rgba(27, 61, 50, 0.52) 0%,
+        rgba(45, 90, 71, 0.28) 42%,
+        rgba(26, 36, 32, 0.72) 100%
+      );
+      pointer-events: none;
+    }
+
+    .cover-slide.active {
+      opacity: 1;
+      animation: kenburns 7s ease-out forwards;
+    }
+
+    @keyframes kenburns {
+      from { transform: scale(1); }
+      to { transform: scale(1.08); }
+    }
+
+    .carousel-dots {
+      display: none;
     }
 
     .masthead {
@@ -503,7 +528,6 @@
       .spread { grid-template-columns: 1fr; gap: 1.1rem; }
       .install-spread { grid-template-columns: 1fr; }
       .masthead-issue { display: none; }
-      .carousel-dots { bottom: 4.75rem; }
     }
 
     @media (max-width: 480px) {
@@ -538,13 +562,12 @@
     <div class="cover-bg" aria-hidden="true">
       <div class="cover-carousel" id="cover-carousel">
         <div class="cover-slide active" data-index="0" style="background-image:url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80')"></div>
-        <div class="cover-slide" data-index="1" style="background-image:url('https://images.unsplash.com/photo-1625246333193-0342f6b8e4c8?auto=format&fit=crop&w=1600&q=80')"></div>
+        <div class="cover-slide" data-index="1" style="background-image:url('https://images.unsplash.com/photo-1592982537447-744a0cb54a8c?auto=format&fit=crop&w=1600&q=80')"></div>
         <div class="cover-slide" data-index="2" style="background-image:url('https://images.unsplash.com/photo-1464226184884-fa280b87c0d8?auto=format&fit=crop&w=1600&q=80')"></div>
-        <div class="cover-slide" data-index="3" style="background-image:url('https://images.unsplash.com/photo-1574943320262-3951b6e7bf70?auto=format&fit=crop&w=1600&q=80')"></div>
-        <div class="cover-slide" data-index="4" style="background-image:url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=1600&q=80')"></div>
+        <div class="cover-slide" data-index="3" style="background-image:url('https://images.unsplash.com/photo-1560493676-04071c5f467d?auto=format&fit=crop&w=1600&q=80')"></div>
+        <div class="cover-slide" data-index="4" style="background-image:url('https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=1600&q=80')"></div>
       </div>
       <div class="cover-overlay"></div>
-      <div class="carousel-dots" id="carousel-dots" role="tablist" aria-label="Hero images"></div>
     </div>
 
     <div class="masthead">
@@ -563,6 +586,9 @@
       <p class="kicker" data-i18n="kicker">Smart Agriculture</p>
       <h1 class="cover-title" id="cover-title" data-i18n-html="cover_title"></h1>
       <p class="deck" data-i18n="deck"></p>
+      <div class="hero-dots" id="carousel-dots" role="tablist" aria-label="Hero images">
+        <span class="hero-slide-label" id="hero-slide-label">1 / 5</span>
+      </div>
       <div class="cover-cta">
         <a class="btn-download" id="dl-china" href="https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.2/AFSA.apk" data-i18n="dl_china">Download (China)</a>
         <a class="btn-download btn-download-intl" id="dl-intl" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk" data-i18n="dl_intl">Download (International)</a>
@@ -652,11 +678,11 @@
       var STRINGS = {
         en: {
           meta_desc: "AFSA — smart agriculture app. Identify crops, manage orchards, download Android APK.",
-          doc_title: "AFSA · Field & Orchard",
+          doc_title: "AFSA — Smart Agriculture",
           wechat_hint: "<strong>In WeChat?</strong> Tap <strong>⋯ → Open in browser</strong> before downloading.",
-          masthead_issue: "Field Issue · 2026",
-          kicker: "Smart Agriculture",
-          cover_title: "Field<br /><em>&</em> Orchard",
+          masthead_issue: "Smart Agriculture · 2026",
+          kicker: "Android Application",
+          cover_title: "AFSA<span class=\"cover-sub\">Smart Agriculture</span>",
           deck: "A field magazine in your pocket—identify fruit, read disease signs, log farm work. Your data lives in the org cloud and follows you when you change phones.",
           dl_china: "Download (China)",
           dl_intl: "Download (International)",
@@ -685,11 +711,11 @@
         },
         zh: {
           meta_desc: "AFSA 智慧农业助手 — 拍照识果、果园管理、农业知识库。Android 下载安装。",
-          doc_title: "AFSA · 田野与果园",
+          doc_title: "AFSA · 智能农业平台",
           wechat_hint: "<strong>微信内打开时</strong>，请点右上角 <strong>「…」→ 在浏览器中打开</strong> 后再下载。",
-          masthead_issue: "田野刊 · 2026",
-          kicker: "智慧农业 · Smart Agriculture",
-          cover_title: "田野<br /><em>与</em> 果园",
+          masthead_issue: "智慧农业 · 2026",
+          kicker: "Android 应用",
+          cover_title: "AFSA<span class=\"cover-sub\">智能农业平台</span>",
           deck: "一本装在手机里的农业杂志——拍照识果、读病害、记农事；个人数据沉入组织云端，换机仍可拾起同一季的记忆。",
           dl_china: "国内下载",
           dl_intl: "国际下载",
@@ -762,11 +788,12 @@
       (function initCarousel() {
         var slides = Array.prototype.slice.call(document.querySelectorAll(".cover-slide"));
         var dotsWrap = document.getElementById("carousel-dots");
+        var slideLabel = document.getElementById("hero-slide-label");
         if (!slides.length || !dotsWrap) return;
 
         var index = 0;
         var timer = null;
-        var intervalMs = 5500;
+        var intervalMs = 4000;
 
         slides.forEach(function (_, i) {
           var btn = document.createElement("button");
@@ -775,15 +802,27 @@
           btn.setAttribute("aria-label", "Slide " + (i + 1));
           if (i === 0) btn.classList.add("active");
           btn.addEventListener("click", function () { goTo(i, true); });
-          dotsWrap.appendChild(btn);
+          dotsWrap.insertBefore(btn, slideLabel);
         });
 
         var dots = Array.prototype.slice.call(dotsWrap.querySelectorAll("button"));
 
+        function updateLabel() {
+          if (slideLabel) slideLabel.textContent = (index + 1) + " / " + slides.length;
+        }
+
         function goTo(i, user) {
           index = (i + slides.length) % slides.length;
-          slides.forEach(function (s, j) { s.classList.toggle("active", j === index); });
+          slides.forEach(function (s, j) {
+            s.classList.toggle("active", j === index);
+            if (j === index) {
+              s.style.animation = "none";
+              void s.offsetWidth;
+              s.style.animation = "";
+            }
+          });
           dots.forEach(function (d, j) { d.classList.toggle("active", j === index); });
+          updateLabel();
           if (user) restart();
         }
 
@@ -795,6 +834,7 @@
         }
 
         restart();
+        updateLabel();
       })();
 
       /* Download links — buttons only, no visible URLs */
