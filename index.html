@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta id="meta-desc" name="description" content="AFSA — smart agriculture app. Identify crops, manage orchards, download Android APK." />
   <title id="doc-title">AFSA · Field &amp; Orchard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,6 +21,7 @@
       --rule: rgba(26, 36, 32, 0.14);
       --serif: "Playfair Display", "Noto Serif SC", "Songti SC", serif;
       --sans: "Source Sans 3", "Noto Sans SC", system-ui, sans-serif;
+      --page-pad: clamp(1rem, 4vw, 1.5rem);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,58 +32,135 @@
       font-family: var(--sans);
       background: var(--cream);
       color: var(--ink);
-      line-height: 1.65;
+      line-height: 1.6;
+      font-size: 16px;
       font-weight: 400;
       -webkit-font-smoothing: antialiased;
+      text-size-adjust: 100%;
     }
 
     .cover {
       position: relative;
       min-height: 100svh;
+      min-height: 100dvh;
       display: grid;
       grid-template-rows: auto 1fr auto;
       overflow: hidden;
-      background:
-        linear-gradient(165deg,
-          rgba(27, 61, 50, 0.72) 0%,
-          rgba(45, 90, 71, 0.55) 38%,
-          rgba(26, 36, 32, 0.82) 100%),
-        url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+      isolation: isolate;
+    }
+
+    .cover-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .cover-carousel {
+      position: absolute;
+      inset: 0;
+    }
+
+    .cover-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.4s ease-in-out;
+      transform: scale(1.02);
+    }
+
+    .cover-slide.active {
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity 1.4s ease-in-out, transform 8s ease-out;
+    }
+
+    .cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        165deg,
+        rgba(27, 61, 50, 0.78) 0%,
+        rgba(45, 90, 71, 0.58) 38%,
+        rgba(26, 36, 32, 0.88) 100%
+      );
+    }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 5.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      gap: 0.45rem;
+      padding: 0.35rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.18);
+      backdrop-filter: blur(4px);
+    }
+
+    .carousel-dots button {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      border: none;
+      padding: 0;
+      background: rgba(255, 255, 255, 0.35);
+      cursor: pointer;
+      transition: background 0.25s, transform 0.25s;
+    }
+
+    .carousel-dots button.active {
+      background: var(--gold-light);
+      transform: scale(1.15);
     }
 
     .masthead {
+      position: relative;
+      z-index: 3;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      padding: 1.25rem 1.5rem;
+      gap: 0.5rem;
+      padding: 0.85rem var(--page-pad);
       border-bottom: 1px solid rgba(255,255,255,0.18);
-      font-size: 0.68rem;
-      letter-spacing: 0.28em;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: rgba(255,255,255,0.72);
     }
 
     .masthead-brand {
       font-family: var(--serif);
-      font-size: 0.95rem;
-      letter-spacing: 0.35em;
+      font-size: 0.88rem;
+      letter-spacing: 0.28em;
       color: #fff;
       font-weight: 600;
+      flex-shrink: 0;
     }
 
     .masthead-right {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
+      gap: 0.65rem;
+      flex-wrap: nowrap;
+      min-width: 0;
+    }
+
+    .masthead-issue {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 9rem;
     }
 
     .lang-switch {
       display: inline-flex;
-      gap: 0.35rem;
+      gap: 0.25rem;
       align-items: center;
+      flex-shrink: 0;
     }
 
     .lang-switch button {
@@ -91,9 +169,10 @@
       color: rgba(255,255,255,0.55);
       cursor: pointer;
       font-family: var(--sans);
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
-      padding: 0.2rem 0.35rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      padding: 0.35rem 0.4rem;
+      min-height: 2rem;
       touch-action: manipulation;
     }
 
@@ -105,29 +184,31 @@
     .lang-switch span { opacity: 0.35; font-size: 0.65rem; }
 
     .cover-body {
+      position: relative;
+      z-index: 3;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 2rem 1.5rem 3rem;
+      padding: 1.25rem var(--page-pad) 2rem;
       max-width: 52rem;
     }
 
     .kicker {
-      font-size: 0.7rem;
-      letter-spacing: 0.32em;
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--gold-light);
-      margin-bottom: 1rem;
+      margin-bottom: 0.65rem;
       font-weight: 500;
     }
 
     .cover-title {
       font-family: var(--serif);
-      font-size: clamp(2.4rem, 8vw, 4.2rem);
+      font-size: clamp(1.75rem, 5vw + 0.4rem, 3.6rem);
       font-weight: 600;
-      line-height: 1.08;
+      line-height: 1.12;
       color: #fff;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.02em;
       text-shadow: 0 2px 24px rgba(0,0,0,0.25);
     }
 
@@ -138,36 +219,39 @@
     }
 
     .deck {
-      margin-top: 1.25rem;
-      font-size: 1.05rem;
+      margin-top: 0.85rem;
+      font-size: clamp(0.88rem, 2.8vw, 1.02rem);
       font-weight: 300;
-      color: rgba(255,255,255,0.88);
+      color: rgba(255,255,255,0.9);
       max-width: 28rem;
-      line-height: 1.7;
-      letter-spacing: 0.02em;
+      line-height: 1.65;
+      letter-spacing: 0.01em;
     }
 
     .cover-cta {
-      margin-top: 2rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.85rem;
-      align-items: center;
+      margin-top: 1.35rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+      max-width: 24rem;
     }
 
     .btn-download {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: center;
+      gap: 0.4rem;
       font-family: var(--sans);
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       font-weight: 600;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       text-decoration: none;
+      text-align: center;
       color: var(--green-deep);
       background: var(--cream);
-      padding: 1rem 1.75rem;
+      padding: 0.85rem 0.75rem;
+      min-height: 2.75rem;
       border: 1px solid var(--cream);
       transition: background 0.2s, color 0.2s, transform 0.2s;
       cursor: pointer;
@@ -192,84 +276,84 @@
     }
 
     .cover-footer {
-      padding: 0.85rem 1.5rem;
+      position: relative;
+      z-index: 3;
+      padding: 0.7rem var(--page-pad);
       border-top: 1px solid rgba(255,255,255,0.12);
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
+      font-size: 0.58rem;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: rgba(255,255,255,0.5);
       display: flex;
       justify-content: space-between;
+      gap: 0.5rem;
     }
 
     .wrap {
       max-width: 68rem;
       margin: 0 auto;
-      padding: 0 1.5rem;
+      padding: 0 var(--page-pad);
     }
 
     .section-label {
       text-align: center;
-      padding: 3.5rem 0 1.5rem;
+      padding: clamp(2rem, 6vw, 3.5rem) 0 1rem;
     }
 
     .section-label span {
       display: inline-block;
-      font-size: 0.65rem;
-      letter-spacing: 0.38em;
+      font-size: 0.6rem;
+      letter-spacing: 0.28em;
       text-transform: uppercase;
       color: var(--ink-soft);
       border-top: 1px solid var(--rule);
       border-bottom: 1px solid var(--rule);
-      padding: 0.5rem 1.2rem;
+      padding: 0.45rem 1rem;
     }
 
     .spread {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      padding: 2rem 0 3rem;
+      gap: clamp(1rem, 4vw, 2rem);
+      padding: 1.25rem 0 2rem;
       border-bottom: 1px solid var(--rule);
-    }
-
-    @media (max-width: 720px) {
-      .spread { grid-template-columns: 1fr; gap: 1.25rem; }
     }
 
     .spread-num {
       font-family: var(--serif);
-      font-size: 4rem;
+      font-size: clamp(2.25rem, 8vw, 4rem);
       font-weight: 400;
       color: var(--cream-deep);
       line-height: 1;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.35rem;
     }
 
     .spread h3 {
       font-family: var(--serif);
-      font-size: 1.5rem;
+      font-size: clamp(1.15rem, 3.5vw, 1.5rem);
       font-weight: 600;
-      margin-bottom: 0.65rem;
+      margin-bottom: 0.5rem;
       color: var(--green-deep);
     }
 
     .spread p {
-      font-size: 0.92rem;
+      font-size: clamp(0.84rem, 2.5vw, 0.92rem);
       color: var(--ink-soft);
       font-weight: 300;
+      line-height: 1.6;
     }
 
     .spread .caption {
-      margin-top: 0.75rem;
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
+      margin-top: 0.6rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--gold);
     }
 
     .pull {
-      margin: 2rem 0 3rem;
-      padding: 2.5rem 2rem;
+      margin: 1.5rem 0 2rem;
+      padding: clamp(1.5rem, 5vw, 2.5rem) clamp(1rem, 4vw, 2rem);
       background: var(--green-deep);
       color: var(--cream);
       text-align: center;
@@ -280,28 +364,28 @@
     .pull::after {
       content: "";
       position: absolute;
-      left: 10%;
-      right: 10%;
+      left: 8%;
+      right: 8%;
       height: 1px;
       background: rgba(255,255,255,0.15);
     }
-    .pull::before { top: 1rem; }
-    .pull::after { bottom: 1rem; }
+    .pull::before { top: 0.75rem; }
+    .pull::after { bottom: 0.75rem; }
 
     .pull blockquote {
       font-family: var(--serif);
-      font-size: clamp(1.35rem, 4vw, 1.85rem);
+      font-size: clamp(1.05rem, 3.5vw, 1.75rem);
       font-weight: 400;
       font-style: italic;
       line-height: 1.45;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
     }
 
     .pull cite {
       display: block;
-      margin-top: 1rem;
-      font-size: 0.68rem;
-      letter-spacing: 0.28em;
+      margin-top: 0.85rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       font-style: normal;
       color: var(--gold-light);
@@ -310,58 +394,59 @@
     .install-spread {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
-      gap: 2.5rem;
-      padding: 2.5rem 0 4rem;
+      gap: clamp(1.25rem, 4vw, 2.5rem);
+      padding: 1.5rem 0 2.5rem;
       align-items: start;
-    }
-
-    @media (max-width: 720px) {
-      .install-spread { grid-template-columns: 1fr; }
     }
 
     .install-spread h2 {
       font-family: var(--serif);
-      font-size: 2rem;
+      font-size: clamp(1.35rem, 4vw, 2rem);
       font-weight: 600;
       color: var(--green-deep);
-      margin-bottom: 1rem;
+      margin-bottom: 0.85rem;
     }
 
     .install-spread ol {
       padding-left: 1.1rem;
-      font-size: 0.92rem;
+      font-size: clamp(0.84rem, 2.5vw, 0.92rem);
       color: var(--ink-soft);
       font-weight: 300;
+      line-height: 1.65;
     }
 
-    .install-spread li { margin-bottom: 0.6rem; }
+    .install-spread li { margin-bottom: 0.55rem; }
     .install-spread strong { font-weight: 600; color: var(--ink); }
 
     .dl-card {
       background: #fff;
       border: 1px solid var(--rule);
-      padding: 1.75rem;
+      padding: clamp(1.25rem, 4vw, 1.75rem);
       text-align: center;
     }
 
     .dl-card .label {
-      font-size: 0.62rem;
-      letter-spacing: 0.32em;
+      font-size: 0.58rem;
+      letter-spacing: 0.24em;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.55rem;
     }
 
     .dl-card .platform {
       font-family: var(--serif);
-      font-size: 1.35rem;
-      margin-bottom: 1.25rem;
+      font-size: clamp(1.1rem, 3.5vw, 1.35rem);
+      margin-bottom: 1rem;
       color: var(--green-deep);
+    }
+
+    .dl-card .btn-stack {
+      display: grid;
+      gap: 0.55rem;
     }
 
     .dl-card .btn-download {
       width: 100%;
-      justify-content: center;
       background: var(--green-deep);
       color: var(--cream);
       border-color: var(--green-deep);
@@ -385,56 +470,87 @@
 
     footer {
       border-top: 1px solid var(--rule);
-      padding: 2rem 1.5rem 2.5rem;
+      padding: 1.5rem var(--page-pad) 2rem;
       text-align: center;
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
       color: var(--ink-soft);
+      line-height: 1.5;
     }
 
     footer .org {
       font-family: var(--serif);
-      font-size: 0.95rem;
-      letter-spacing: 0.2em;
+      font-size: clamp(0.82rem, 2.5vw, 0.95rem);
+      letter-spacing: 0.16em;
       color: var(--green-deep);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
     }
 
     .wechat-hint {
       display: none;
-      margin: 0 1.5rem 1rem;
-      padding: 0.85rem 1rem;
+      margin: 0 var(--page-pad) 0.75rem;
+      padding: 0.75rem 0.9rem;
       background: #fff8e8;
       border: 1px solid #e8d4b8;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--ink-soft);
       line-height: 1.5;
     }
 
     .wechat-hint strong { color: var(--ink); }
 
-    .dl-url-box {
-      margin-top: 1rem;
-      padding: 0.75rem 0.9rem;
-      background: rgba(0,0,0,0.22);
-      border: 1px solid rgba(255,255,255,0.2);
-      font-size: 0.72rem;
-      line-height: 1.45;
-      color: rgba(255,255,255,0.88);
-      word-break: break-all;
+    @media (max-width: 720px) {
+      .spread { grid-template-columns: 1fr; gap: 1.1rem; }
+      .install-spread { grid-template-columns: 1fr; }
+      .masthead-issue { display: none; }
+      .carousel-dots { bottom: 4.75rem; }
     }
 
-    .dl-url-box a { color: var(--gold-light); }
+    @media (max-width: 480px) {
+      .cover-cta {
+        grid-template-columns: 1fr;
+        max-width: none;
+      }
+
+      .btn-download {
+        width: 100%;
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        padding: 0.9rem 1rem;
+      }
+
+      .cover-body {
+        padding-bottom: 1.5rem;
+      }
+
+      .cover-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+      }
+    }
   </style>
 </head>
 <body>
   <p id="wechat-hint" class="wechat-hint" hidden data-i18n-html="wechat_hint"></p>
 
   <header class="cover">
+    <div class="cover-bg" aria-hidden="true">
+      <div class="cover-carousel" id="cover-carousel">
+        <div class="cover-slide active" data-index="0" style="background-image:url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80')"></div>
+        <div class="cover-slide" data-index="1" style="background-image:url('https://images.unsplash.com/photo-1625246333193-0342f6b8e4c8?auto=format&fit=crop&w=1600&q=80')"></div>
+        <div class="cover-slide" data-index="2" style="background-image:url('https://images.unsplash.com/photo-1464226184884-fa280b87c0d8?auto=format&fit=crop&w=1600&q=80')"></div>
+        <div class="cover-slide" data-index="3" style="background-image:url('https://images.unsplash.com/photo-1574943320262-3951b6e7bf70?auto=format&fit=crop&w=1600&q=80')"></div>
+        <div class="cover-slide" data-index="4" style="background-image:url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=1600&q=80')"></div>
+      </div>
+      <div class="cover-overlay"></div>
+      <div class="carousel-dots" id="carousel-dots" role="tablist" aria-label="Hero images"></div>
+    </div>
+
     <div class="masthead">
       <span class="masthead-brand">AFSA</span>
       <div class="masthead-right">
-        <span data-i18n="masthead_issue">Field Issue · 2026</span>
+        <span class="masthead-issue" data-i18n="masthead_issue">Field Issue · 2026</span>
         <div class="lang-switch" role="group" aria-label="Language">
           <button type="button" id="lang-en" class="active">EN</button>
           <span>|</span>
@@ -448,15 +564,9 @@
       <h1 class="cover-title" id="cover-title" data-i18n-html="cover_title"></h1>
       <p class="deck" data-i18n="deck"></p>
       <div class="cover-cta">
-        <a class="btn-download" id="dl-china" href="https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.1/AFSA.apk" data-i18n="dl_china">Download (China)</a>
+        <a class="btn-download" id="dl-china" href="https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.2/AFSA.apk" data-i18n="dl_china">Download (China)</a>
         <a class="btn-download btn-download-intl" id="dl-intl" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk" data-i18n="dl_intl">Download (International)</a>
       </div>
-      <p class="dl-url-box">
-        <span data-i18n="url_china_label">China:</span>
-        <a id="gitee-dl-url" href="https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.1/AFSA.apk">gitee.com/…/AFSA.apk</a><br />
-        <span data-i18n="url_intl_label">International:</span>
-        <a id="github-dl-url" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk">github.com/…/AFSA.apk</a>
-      </p>
     </div>
 
     <div class="cover-footer">
@@ -524,15 +634,17 @@
       <div class="dl-card">
         <p class="label">Android Edition</p>
         <p class="platform" data-i18n="platform_line">AFSA.apk · Latest · ~37MB</p>
-        <a class="btn-download" id="dl-china-card" href="https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.1/AFSA.apk" data-i18n="dl_china">Download (China)</a>
-        <a class="btn-download btn-download-intl" style="margin-top:0.65rem" id="dl-intl-card" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk" data-i18n="dl_intl">Download (International)</a>
+        <div class="btn-stack">
+          <a class="btn-download" id="dl-china-card" href="https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.2/AFSA.apk" data-i18n="dl_china">Download (China)</a>
+          <a class="btn-download btn-download-intl" id="dl-intl-card" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk" data-i18n="dl_intl">Download (International)</a>
+        </div>
       </div>
     </div>
   </main>
 
   <footer>
     <p class="org">ai-for-smart-agriculture</p>
-    <p style="margin-top:0.75rem; opacity:0.75" data-i18n="footer_tag">GitHub Pages · Editorial landing</p>
+    <p style="margin-top:0.6rem; opacity:0.75" data-i18n="footer_tag">GitHub Pages · Editorial landing</p>
   </footer>
 
   <script>
@@ -548,8 +660,6 @@
           deck: "A field magazine in your pocket—identify fruit, read disease signs, log farm work. Your data lives in the org cloud and follows you when you change phones.",
           dl_china: "Download (China)",
           dl_intl: "Download (International)",
-          url_china_label: "China:",
-          url_intl_label: "International:",
           cover_footer: "Editorial · No account required",
           section_features: "Features",
           f1_title: "Recognition",
@@ -583,8 +693,6 @@
           deck: "一本装在手机里的农业杂志——拍照识果、读病害、记农事；个人数据沉入组织云端，换机仍可拾起同一季的记忆。",
           dl_china: "国内下载",
           dl_intl: "国际下载",
-          url_china_label: "国内：",
-          url_intl_label: "国际：",
           cover_footer: "编辑部 · 无账号可下载",
           section_features: "专题 · Features",
           f1_title: "智能识别",
@@ -650,18 +758,53 @@
         document.getElementById("wechat-hint").hidden = false;
       }
 
+      /* Hero carousel */
+      (function initCarousel() {
+        var slides = Array.prototype.slice.call(document.querySelectorAll(".cover-slide"));
+        var dotsWrap = document.getElementById("carousel-dots");
+        if (!slides.length || !dotsWrap) return;
+
+        var index = 0;
+        var timer = null;
+        var intervalMs = 5500;
+
+        slides.forEach(function (_, i) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.setAttribute("role", "tab");
+          btn.setAttribute("aria-label", "Slide " + (i + 1));
+          if (i === 0) btn.classList.add("active");
+          btn.addEventListener("click", function () { goTo(i, true); });
+          dotsWrap.appendChild(btn);
+        });
+
+        var dots = Array.prototype.slice.call(dotsWrap.querySelectorAll("button"));
+
+        function goTo(i, user) {
+          index = (i + slides.length) % slides.length;
+          slides.forEach(function (s, j) { s.classList.toggle("active", j === index); });
+          dots.forEach(function (d, j) { d.classList.toggle("active", j === index); });
+          if (user) restart();
+        }
+
+        function next() { goTo(index + 1, false); }
+
+        function restart() {
+          if (timer) clearInterval(timer);
+          timer = setInterval(next, intervalMs);
+        }
+
+        restart();
+      })();
+
+      /* Download links — buttons only, no visible URLs */
       var intl = "https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk";
-      var giteeFallback = "https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.1/AFSA.apk";
+      var giteeFallback = "https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.2/AFSA.apk";
 
       ["dl-intl", "dl-intl-card"].forEach(function (id) {
         var a = document.getElementById(id);
         if (a) a.href = intl;
       });
-      var ghUrl = document.getElementById("github-dl-url");
-      if (ghUrl) {
-        ghUrl.href = intl;
-        ghUrl.textContent = intl.replace(/^https:\/\//, "");
-      }
 
       fetch("https://gitee.com/api/v5/repos/yhlkxkzs/afsa-android-release/releases/latest")
         .then(function (r) { return r.ok ? r.json() : null; })
@@ -677,11 +820,6 @@
             var a = document.getElementById(id);
             if (a) a.href = url;
           });
-          var urlEl = document.getElementById("gitee-dl-url");
-          if (urlEl) {
-            urlEl.href = url;
-            urlEl.textContent = url.replace(/^https:\/\//, "");
-          }
         })
         .catch(function () {});
     })();
