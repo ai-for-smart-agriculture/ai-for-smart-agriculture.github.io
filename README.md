@@ -1,25 +1,52 @@
-# AFSA 组织官网 · 艺术杂志风
+# AFSA organization website
 
-部署在 **`ai-for-smart-agriculture`** 组织下的 GitHub Pages 介绍页。
+Bilingual landing page for **AFSA — Smart Agriculture** (editorial / magazine style, aligned with the in-app Bloom login aesthetic).
 
-视觉与 App 内「编辑部 / Bloom 登录」一致：**柔光田园、杂志排版、衬线刊头、暖绿米白**。
+## Live site
 
-## 上线
+**https://ai-for-smart-agriculture.github.io/**
 
-1. 在组织下新建仓库 **`ai-for-smart-agriculture.github.io`**（Public）
-2. 推送本目录 `index.html`、`.nojekyll`、可选 `assets/` 自定义配图
-3. Settings → Pages → Branch **main** → Folder **/ (root)**
+- English default; **中文** toggle in the header  
+- Hero image carousel  
+- **Download (China)** → Gitee `yhlkxkzs/afsa-android-release`  
+- **Download (International)** → `ai-for-smart-agriculture/afsa-android-releases` on GitHub  
 
-访问：**https://ai-for-smart-agriculture.github.io/**
+---
 
-## 替换封面摄影（推荐）
+## Deploy
 
-当前封面使用 Unsplash 田园图作为占位。若与 App 素材统一，可将编辑部图（如 `brand_mist_orchard.jpg`）放入 `assets/hero.jpg`，并在 `index.html` 的 `.cover` 背景改为：
+Hosted on the org repo **`ai-for-smart-agriculture.github.io`** (GitHub Pages).
 
-```css
-url("assets/hero.jpg") center/cover no-repeat
+From the monorepo root:
+
+```bash
+python scripts/deploy_org_website.py
 ```
 
-## APK 下载
+This copies `afsa-org-website/index.html` and `.nojekyll`, pushes to the Pages repo, and triggers a Pages rebuild.
 
-按钮指向 app_v1 最新 Release，发版后自动更新，无需改页面。
+Manual steps (first time):
+
+1. Create public repo **`ai-for-smart-agriculture.github.io`** under the org  
+2. Settings → Pages → Branch **main** → Folder **/ (root)**  
+
+---
+
+## Files
+
+| File | Purpose |
+|------|---------|
+| `index.html` | Single-page site (HTML + CSS + JS) |
+| `.nojekyll` | Disable Jekyll on GitHub Pages |
+
+Optional: add `assets/hero.jpg` and point `.cover` background to your own photography.
+
+---
+
+## Related links
+
+| | URL |
+|---|---|
+| App source | https://github.com/ai-agriculture-circuits-and-systems/app_v1 |
+| Intl. APK mirror | https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases |
+| China APK mirror | https://gitee.com/yhlkxkzs/afsa-android-release/releases |
