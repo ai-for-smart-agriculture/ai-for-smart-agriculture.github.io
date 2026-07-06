@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="AFSA 智慧农业助手 — 艺术杂志风介绍页，Android 下载安装。" />
-  <title>AFSA · 田野与果园</title>
+  <meta id="meta-desc" name="description" content="AFSA — smart agriculture app. Identify crops, manage orchards, download Android APK." />
+  <title id="doc-title">AFSA · Field &amp; Orchard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
@@ -36,7 +36,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* —— Cover spread —— */
     .cover {
       position: relative;
       min-height: 100svh;
@@ -55,6 +54,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
       padding: 1.25rem 1.5rem;
       border-bottom: 1px solid rgba(255,255,255,0.18);
       font-size: 0.68rem;
@@ -70,6 +71,38 @@
       color: #fff;
       font-weight: 600;
     }
+
+    .masthead-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      gap: 0.35rem;
+      align-items: center;
+    }
+
+    .lang-switch button {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.55);
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      padding: 0.2rem 0.35rem;
+      touch-action: manipulation;
+    }
+
+    .lang-switch button.active {
+      color: #fff;
+      border-bottom: 1px solid var(--gold-light);
+    }
+
+    .lang-switch span { opacity: 0.35; font-size: 0.65rem; }
 
     .cover-body {
       display: flex;
@@ -158,18 +191,6 @@
       color: var(--cream);
     }
 
-    .btn-ghost {
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.75);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.35);
-      padding-bottom: 2px;
-    }
-
-    .btn-ghost:hover { color: #fff; }
-
     .cover-footer {
       padding: 0.85rem 1.5rem;
       border-top: 1px solid rgba(255,255,255,0.12);
@@ -181,7 +202,6 @@
       justify-content: space-between;
     }
 
-    /* —— Magazine interior —— */
     .wrap {
       max-width: 68rem;
       margin: 0 auto;
@@ -247,7 +267,6 @@
       color: var(--gold);
     }
 
-    /* Pull quote */
     .pull {
       margin: 2rem 0 3rem;
       padding: 2.5rem 2rem;
@@ -288,7 +307,6 @@
       color: var(--gold-light);
     }
 
-    /* Install spread */
     .install-spread {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
@@ -354,19 +372,17 @@
       color: #fff;
     }
 
-    .dl-card .meta {
-      margin-top: 1rem;
-      font-size: 0.72rem;
-      color: var(--ink-soft);
-      line-height: 1.5;
+    .dl-card .btn-download-intl {
+      background: transparent;
+      color: var(--green-deep);
+      border-color: var(--rule);
     }
 
-    .dl-card a.inline {
-      color: var(--green);
-      word-break: break-all;
+    .dl-card .btn-download-intl:hover {
+      background: var(--cream-deep);
+      color: var(--green-deep);
     }
 
-    /* Colophon */
     footer {
       border-top: 1px solid var(--rule);
       padding: 2rem 1.5rem 2.5rem;
@@ -383,9 +399,6 @@
       color: var(--green-deep);
       margin-bottom: 0.5rem;
     }
-
-    footer a { color: var(--green); text-decoration: none; touch-action: manipulation; }
-    footer a:hover { text-decoration: underline; }
 
     .wechat-hint {
       display: none;
@@ -415,64 +428,58 @@
   </style>
 </head>
 <body>
-  <p id="wechat-hint" class="wechat-hint" hidden>
-    <strong>微信内打开时</strong>，请点右上角 <strong>「…」→ 在浏览器中打开</strong> 后再下载。
-  </p>
+  <p id="wechat-hint" class="wechat-hint" hidden data-i18n-html="wechat_hint"></p>
 
-  <!-- Cover -->
   <header class="cover">
     <div class="masthead">
       <span class="masthead-brand">AFSA</span>
-      <span>ai-for-smart-agriculture</span>
-      <span>Field Issue · 2026</span>
+      <div class="masthead-right">
+        <span data-i18n="masthead_issue">Field Issue · 2026</span>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" id="lang-en" class="active">EN</button>
+          <span>|</span>
+          <button type="button" id="lang-zh">中文</button>
+        </div>
+      </div>
     </div>
 
     <div class="cover-body">
-      <p class="kicker">Smart Agriculture · 智慧农业</p>
-      <h1 class="cover-title">田野<br /><em>与</em> 果园</h1>
-      <p class="deck">
-        一本装在手机里的农业杂志——拍照识果、读病害、记农事；
-        个人数据沉入组织云端，换机仍可拾起同一季的记忆。
-      </p>
+      <p class="kicker" data-i18n="kicker">Smart Agriculture</p>
+      <h1 class="cover-title" id="cover-title" data-i18n-html="cover_title"></h1>
+      <p class="deck" data-i18n="deck"></p>
       <div class="cover-cta">
-        <a
-          class="btn-download"
-          id="dl-china"
-          href="https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.1/AFSA.apk"
-        >国内下载</a>
-        <a
-          class="btn-download btn-download-intl"
-          id="dl-intl"
-          href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk"
-        >国际下载</a>
+        <a class="btn-download" id="dl-china" href="https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.1/AFSA.apk" data-i18n="dl_china">Download (China)</a>
+        <a class="btn-download btn-download-intl" id="dl-intl" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk" data-i18n="dl_intl">Download (International)</a>
       </div>
       <p class="dl-url-box">
-        国内：<a id="gitee-dl-url" href="https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.1/AFSA.apk">gitee.com/…/releases/download/v1.1.1/AFSA.apk</a><br />
-        国际：<a id="github-dl-url" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk">github.com/…/releases/latest/download/AFSA.apk</a>
+        <span data-i18n="url_china_label">China:</span>
+        <a id="gitee-dl-url" href="https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.1/AFSA.apk">gitee.com/…/AFSA.apk</a><br />
+        <span data-i18n="url_intl_label">International:</span>
+        <a id="github-dl-url" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk">github.com/…/AFSA.apk</a>
       </p>
     </div>
 
     <div class="cover-footer">
       <span>Vol. I</span>
-      <span>Editorial · 无账号可下载</span>
+      <span data-i18n="cover_footer">Editorial · No account required</span>
     </div>
   </header>
 
   <main>
-    <div class="section-label"><span>Features · 专题</span></div>
+    <div class="section-label"><span data-i18n="section_features">Features</span></div>
 
     <div class="wrap">
       <div class="spread">
         <article>
           <div class="spread-num">01</div>
-          <h3>智能识别</h3>
-          <p>果实种类、成熟度与病害，多模型并行解读一张田间照片。任务可退至后台，结果以杂志式版面回看。</p>
+          <h3 data-i18n="f1_title">Recognition</h3>
+          <p data-i18n="f1_body"></p>
           <p class="caption">Recognition · GitHub Actions</p>
         </article>
         <article>
           <div class="spread-num">02</div>
-          <h3>果园叙事</h3>
-          <p>地图围栏勾勒地块边界，农事计划与作业记录像连载专栏，一页页写入你的果园档案。</p>
+          <h3 data-i18n="f2_title">Orchard</h3>
+          <p data-i18n="f2_body"></p>
           <p class="caption">Orchard · Cloud Sync</p>
         </article>
       </div>
@@ -480,14 +487,14 @@
       <div class="spread">
         <article>
           <div class="spread-num">03</div>
-          <h3>知识库</h3>
-          <p>病虫害防治与栽培条目，配以编辑部式排版；测验模块供闲暇翻阅，中英文皆可切换。</p>
+          <h3 data-i18n="f3_title">Knowledge</h3>
+          <p data-i18n="f3_body"></p>
           <p class="caption">Knowledge · Editorial UI</p>
         </article>
         <article>
           <div class="spread-num">04</div>
-          <h3>个人仓</h3>
-          <p>手机号注册或 GitHub 登录；识别记录与果园索引存入组织私有仓，账号即一本可迁移的田野笔记本。</p>
+          <h3 data-i18n="f4_title">Personal hub</h3>
+          <p data-i18n="f4_body"></p>
           <p class="caption">user-*-incoming</p>
         </article>
       </div>
@@ -495,59 +502,153 @@
 
     <div class="wrap">
       <aside class="pull">
-        <blockquote>「把识别留在现场，把故事带进仓库。」</blockquote>
-        <cite>AFSA Editorial · 田野手记</cite>
+        <blockquote data-i18n="pull_quote"></blockquote>
+        <cite data-i18n="pull_cite">AFSA Editorial · Field Notes</cite>
       </aside>
     </div>
 
-    <div class="section-label"><span>Install · 装帧说明</span></div>
+    <div class="section-label"><span data-i18n="section_install">Install</span></div>
 
     <div class="wrap install-spread">
       <div>
-        <h2>如何安装</h2>
+        <h2 data-i18n="install_title">How to install</h2>
         <ol>
-          <li>点击右侧 <strong>「国内下载」</strong>（Gitee，无需 VPN）或 <strong>「国际下载」</strong>（GitHub）。</li>
-          <li>等待 <strong>AFSA.apk</strong> 下载完成（约 37MB）。</li>
-          <li>在下载通知或文件管理中 <strong>打开安装包</strong>。</li>
-          <li>若系统拦截「未知来源」，请允许 <strong>本浏览器安装应用</strong> 后重试。</li>
-          <li>安装完成，用 <strong>手机号注册</strong> 进入 App；数据将写入组织个人仓。</li>
+          <li data-i18n-html="install_1"></li>
+          <li data-i18n-html="install_2"></li>
+          <li data-i18n-html="install_3"></li>
+          <li data-i18n-html="install_4"></li>
+          <li data-i18n-html="install_5"></li>
         </ol>
       </div>
       <div class="dl-card">
         <p class="label">Android Edition</p>
-        <p class="platform">AFSA.apk · 最新 Release · 约 37MB</p>
-        <a
-          class="btn-download"
-          id="dl-china-card"
-          href="https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.1/AFSA.apk"
-        >国内下载</a>
-        <a
-          class="btn-download btn-download-intl"
-          style="margin-top:0.65rem"
-          id="dl-intl-card"
-          href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk"
-        >国际下载</a>
+        <p class="platform" data-i18n="platform_line">AFSA.apk · Latest · ~37MB</p>
+        <a class="btn-download" id="dl-china-card" href="https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.1/AFSA.apk" data-i18n="dl_china">Download (China)</a>
+        <a class="btn-download btn-download-intl" style="margin-top:0.65rem" id="dl-intl-card" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk" data-i18n="dl_intl">Download (International)</a>
       </div>
     </div>
   </main>
 
   <footer>
     <p class="org">ai-for-smart-agriculture</p>
-    <p style="margin-top:0.75rem; opacity:0.75">GitHub Pages · 艺术杂志风介绍页</p>
+    <p style="margin-top:0.75rem; opacity:0.75" data-i18n="footer_tag">GitHub Pages · Editorial landing</p>
   </footer>
 
   <script>
     (function () {
-      var ua = navigator.userAgent || "";
-      if (/MicroMessenger|QQ\//i.test(ua)) {
-        var el = document.getElementById("wechat-hint");
-        if (el) el.hidden = false;
+      var STRINGS = {
+        en: {
+          meta_desc: "AFSA — smart agriculture app. Identify crops, manage orchards, download Android APK.",
+          doc_title: "AFSA · Field & Orchard",
+          wechat_hint: "<strong>In WeChat?</strong> Tap <strong>⋯ → Open in browser</strong> before downloading.",
+          masthead_issue: "Field Issue · 2026",
+          kicker: "Smart Agriculture",
+          cover_title: "Field<br /><em>&</em> Orchard",
+          deck: "A field magazine in your pocket—identify fruit, read disease signs, log farm work. Your data lives in the org cloud and follows you when you change phones.",
+          dl_china: "Download (China)",
+          dl_intl: "Download (International)",
+          url_china_label: "China:",
+          url_intl_label: "International:",
+          cover_footer: "Editorial · No account required",
+          section_features: "Features",
+          f1_title: "Recognition",
+          f1_body: "Fruit type, ripeness, and disease—several models read one field photo. Jobs run in the background; results return in a magazine-style layout.",
+          f2_title: "Orchard",
+          f2_body: "Map fences outline your blocks; plans and work logs read like serial columns in your orchard archive.",
+          f3_title: "Knowledge",
+          f3_body: "Pest, disease, and growing guides in editorial layout; quizzes for quiet moments—English and Chinese in the app.",
+          f4_title: "Personal hub",
+          f4_body: "Register with phone or GitHub; recognition and orchard data sync to your private org repo—a field notebook you can move.",
+          pull_quote: "“Leave recognition in the field; carry the story to the cloud.”",
+          pull_cite: "AFSA Editorial · Field Notes",
+          section_install: "Install",
+          install_title: "How to install",
+          install_1: "Tap <strong>Download (China)</strong> (Gitee, no VPN) or <strong>Download (International)</strong> (GitHub).",
+          install_2: "Wait for <strong>AFSA.apk</strong> to finish (~37MB).",
+          install_3: "<strong>Open the package</strong> from your download notification or file manager.",
+          install_4: "If blocked as unknown source, allow <strong>install from this browser</strong> and retry.",
+          install_5: "After install, <strong>register with your phone</strong>; data syncs to your personal org repo.",
+          platform_line: "AFSA.apk · Latest · ~37MB",
+          footer_tag: "GitHub Pages · Editorial landing"
+        },
+        zh: {
+          meta_desc: "AFSA 智慧农业助手 — 拍照识果、果园管理、农业知识库。Android 下载安装。",
+          doc_title: "AFSA · 田野与果园",
+          wechat_hint: "<strong>微信内打开时</strong>，请点右上角 <strong>「…」→ 在浏览器中打开</strong> 后再下载。",
+          masthead_issue: "田野刊 · 2026",
+          kicker: "智慧农业 · Smart Agriculture",
+          cover_title: "田野<br /><em>与</em> 果园",
+          deck: "一本装在手机里的农业杂志——拍照识果、读病害、记农事；个人数据沉入组织云端，换机仍可拾起同一季的记忆。",
+          dl_china: "国内下载",
+          dl_intl: "国际下载",
+          url_china_label: "国内：",
+          url_intl_label: "国际：",
+          cover_footer: "编辑部 · 无账号可下载",
+          section_features: "专题 · Features",
+          f1_title: "智能识别",
+          f1_body: "果实种类、成熟度与病害，多模型并行解读一张田间照片。任务可退至后台，结果以杂志式版面回看。",
+          f2_title: "果园叙事",
+          f2_body: "地图围栏勾勒地块边界，农事计划与作业记录像连载专栏，一页页写入你的果园档案。",
+          f3_title: "知识库",
+          f3_body: "病虫害防治与栽培条目，配以编辑部式排版；测验模块供闲暇翻阅，中英文皆可切换。",
+          f4_title: "个人仓",
+          f4_body: "手机号注册或 GitHub 登录；识别记录与果园索引存入组织私有仓，账号即一本可迁移的田野笔记本。",
+          pull_quote: "「把识别留在现场，把故事带进仓库。」",
+          pull_cite: "AFSA Editorial · 田野手记",
+          section_install: "装帧说明 · Install",
+          install_title: "如何安装",
+          install_1: "点击 <strong>「国内下载」</strong>（Gitee，无需 VPN）或 <strong>「国际下载」</strong>（GitHub）。",
+          install_2: "等待 <strong>AFSA.apk</strong> 下载完成（约 37MB）。",
+          install_3: "在下载通知或文件管理中 <strong>打开安装包</strong>。",
+          install_4: "若系统拦截「未知来源」，请允许 <strong>本浏览器安装应用</strong> 后重试。",
+          install_5: "安装完成，用 <strong>手机号注册</strong> 进入 App；数据将写入组织个人仓。",
+          platform_line: "AFSA.apk · 最新 Release · 约 37MB",
+          footer_tag: "GitHub Pages · 艺术杂志风介绍页"
+        }
+      };
+
+      var LANG_KEY = "afsa-site-lang";
+      var currentLang = "en";
+
+      function detectLang() {
+        var params = new URLSearchParams(window.location.search);
+        var q = params.get("lang");
+        if (q === "zh" || q === "en") return q;
+        var saved = localStorage.getItem(LANG_KEY);
+        if (saved === "zh" || saved === "en") return saved;
+        return "en";
       }
 
-      var intl =
-        "https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk";
-      var giteeFallback =
-        "https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.1/AFSA.apk";
+      function applyLang(lang) {
+        currentLang = lang === "zh" ? "zh" : "en";
+        localStorage.setItem(LANG_KEY, currentLang);
+        document.documentElement.lang = currentLang === "zh" ? "zh-CN" : "en";
+        var t = STRINGS[currentLang];
+        document.getElementById("meta-desc").setAttribute("content", t.meta_desc);
+        document.getElementById("doc-title").textContent = t.doc_title;
+        document.querySelectorAll("[data-i18n]").forEach(function (el) {
+          var key = el.getAttribute("data-i18n");
+          if (t[key] !== undefined) el.textContent = t[key];
+        });
+        document.querySelectorAll("[data-i18n-html]").forEach(function (el) {
+          var key = el.getAttribute("data-i18n-html");
+          if (t[key] !== undefined) el.innerHTML = t[key];
+        });
+        document.getElementById("lang-en").classList.toggle("active", currentLang === "en");
+        document.getElementById("lang-zh").classList.toggle("active", currentLang === "zh");
+      }
+
+      document.getElementById("lang-en").addEventListener("click", function () { applyLang("en"); });
+      document.getElementById("lang-zh").addEventListener("click", function () { applyLang("zh"); });
+      applyLang(detectLang());
+
+      var ua = navigator.userAgent || "";
+      if (/MicroMessenger|QQ\//i.test(ua)) {
+        document.getElementById("wechat-hint").hidden = false;
+      }
+
+      var intl = "https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/latest/download/AFSA.apk";
+      var giteeFallback = "https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.1/AFSA.apk";
 
       ["dl-intl", "dl-intl-card"].forEach(function (id) {
         var a = document.getElementById(id);
@@ -566,10 +667,7 @@
           var assets = rel.assets || [];
           var apk = null;
           for (var i = 0; i < assets.length; i++) {
-            if (assets[i].name === "AFSA.apk") {
-              apk = assets[i];
-              break;
-            }
+            if (assets[i].name === "AFSA.apk") { apk = assets[i]; break; }
           }
           var url = (apk && apk.browser_download_url) || giteeFallback;
           ["dl-china", "dl-china-card"].forEach(function (id) {
