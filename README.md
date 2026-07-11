@@ -8,8 +8,7 @@ Bilingual landing page for **AFSA — Smart Agriculture** (editorial / magazine 
 
 - English default; **中文** toggle in the header  
 - Hero image carousel  
-- **Download (China)** → Gitee `yhlkxkzs/afsa-android-release`  
-- **Download (International)** → `ai-for-smart-agriculture/afsa-android-releases` on GitHub  
+- **Download** — GitHub [`app_v1` v1.1.2 release](https://github.com/ai-agriculture-circuits-and-systems/app_v1/releases/tag/v1.1.2); if GitHub is unreachable, falls back to [Gitee APK](https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.2/AFSA.apk)  
 
 ---
 
