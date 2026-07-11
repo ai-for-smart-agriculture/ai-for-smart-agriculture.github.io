@@ -36,6 +36,7 @@ Manual steps (first time):
 | File | Purpose |
 |------|---------|
 | `index.html` | Single-page site (HTML + CSS + JS) |
+| `assets/hero/*.jpg` | Hero carousel backgrounds (bundled; no external CDN) |
 | `.nojekyll` | Disable Jekyll on GitHub Pages |
 
 Optional: add `assets/hero.jpg` and point `.cover` background to your own photography.
