@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta id="meta-desc" name="description" content="AFSA — smart agriculture app. Identify crops, manage orchards, download Android APK." />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta name="version" content="2026-07-11-v2" />
+  <meta name="version" content="2026-07-12-v1" />
   <title id="doc-title">AFSA — Smart Agriculture</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -590,7 +590,7 @@
         <span class="hero-slide-label" id="hero-slide-label">1 / 5</span>
       </div>
       <div class="cover-cta">
-        <a class="btn-download" id="dl-main" href="https://github.com/ai-agriculture-circuits-and-systems/app_v1/releases/tag/v1.1.2" data-i18n="dl_download">Download AFSA</a>
+        <a class="btn-download" id="dl-main" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/download/v1.1.2/AFSA.apk" data-i18n="dl_download">Download AFSA</a>
       </div>
     </div>
 
@@ -660,7 +660,7 @@
         <p class="label">Android Edition</p>
         <p class="platform" id="platform-line" data-i18n="platform_line">AFSA.apk · v1.1.2 · ~41MB</p>
         <div class="btn-stack">
-          <a class="btn-download" id="dl-main-card" href="https://github.com/ai-agriculture-circuits-and-systems/app_v1/releases/tag/v1.1.2" data-i18n="dl_download">Download AFSA</a>
+          <a class="btn-download" id="dl-main-card" href="https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/download/v1.1.2/AFSA.apk" data-i18n="dl_download">Download AFSA</a>
         </div>
       </div>
     </div>
@@ -697,7 +697,7 @@
           pull_cite: "AFSA Editorial · Field Notes",
           section_install: "Install",
           install_title: "How to install",
-          install_1: "Tap <strong>Download AFSA</strong>. Opens the <strong>app_v1</strong> release on GitHub; if unreachable, Gitee direct download is used.",
+          install_1: "Tap <strong>Download AFSA</strong>. GitHub public mirror first (no login); if unreachable, Gitee direct download is used.",
           install_2: "Wait for <strong>AFSA.apk</strong> to finish (~41MB).",
           install_3: "<strong>Open the package</strong> from your download notification or file manager.",
           install_4: "If blocked as unknown source, allow <strong>install from this browser</strong> and retry.",
@@ -729,7 +729,7 @@
           pull_cite: "AFSA Editorial · 田野手记",
           section_install: "装帧说明 · Install",
           install_title: "如何安装",
-          install_1: "点击 <strong>「下载 AFSA」</strong>。优先打开 GitHub <strong>app_v1</strong> 发布页；若访问不到则自动改用 Gitee 直链下载。",
+          install_1: "点击 <strong>「下载 AFSA」</strong>。优先从 GitHub 公开镜像直链下载（无需登录）；若访问不到则自动改用 Gitee。",
           install_2: "等待 <strong>AFSA.apk</strong> 下载完成（约 41MB）。",
           install_3: "在下载通知或文件管理中 <strong>打开安装包</strong>。",
           install_4: "若系统拦截「未知来源」，请允许 <strong>本浏览器安装应用</strong> 后重试。",
@@ -833,9 +833,11 @@
         updateLabel();
       })();
 
-      /* Download — app_v1 release page (GitHub), Gitee APK fallback */
-      var GITHUB_RELEASE_URL =
-        "https://github.com/ai-agriculture-circuits-and-systems/app_v1/releases/tag/v1.1.2";
+      /* Download — public GitHub mirror APK, Gitee fallback */
+      var GITHUB_RELEASE_API =
+        "https://api.github.com/repos/ai-for-smart-agriculture/afsa-android-releases/releases/latest";
+      var GITHUB_APK_URL =
+        "https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/download/v1.1.2/AFSA.apk";
       var GITEE_APK_URL =
         "https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.2/AFSA.apk";
       var GITEE_RELEASE_API =
@@ -867,6 +869,20 @@
         }
       }
 
+      function apkFromGithubRelease(rel) {
+        if (!rel) return null;
+        var assets = rel.assets || [];
+        for (var i = 0; i < assets.length; i++) {
+          if (assets[i].name === "AFSA.apk") return assets[i].browser_download_url;
+        }
+        var tag = rel.tag_name;
+        if (tag) {
+          return "https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/download/" +
+            tag + "/AFSA.apk";
+        }
+        return null;
+      }
+
       function apkFromGiteeRelease(rel) {
         if (!rel) return null;
         var assets = rel.assets || [];
@@ -876,34 +892,26 @@
         return null;
       }
 
-      function probeGithubReachable() {
-        var ctrl = new AbortController();
-        var timer = setTimeout(function () { ctrl.abort(); }, 4000);
-        return fetch(
-          "https://api.github.com/repos/ai-agriculture-circuits-and-systems/app_v1",
-          { headers: { Accept: "application/vnd.github+json" }, signal: ctrl.signal }
-        )
-          .then(function (r) { clearTimeout(timer); return r.ok || r.status === 404; })
-          .catch(function () { clearTimeout(timer); return false; });
-      }
+      setDownloadHref(GITHUB_APK_URL);
 
-      setDownloadHref(GITHUB_RELEASE_URL);
-
-      probeGithubReachable().then(function (ok) {
-        if (!ok) {
+      fetch(GITHUB_RELEASE_API, { headers: { Accept: "application/vnd.github+json" } })
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error("github blocked")); })
+        .then(function (rel) {
+          var url = apkFromGithubRelease(rel);
+          if (url) setDownloadHref(url);
+          updatePlatformFromRelease(rel);
+        })
+        .catch(function () {
           setDownloadHref(GITEE_APK_URL);
-        }
-        return fetch(GITEE_RELEASE_API)
-          .then(function (r) { return r.ok ? r.json() : null; })
-          .then(function (rel) {
-            if (!ok) {
+          fetch(GITEE_RELEASE_API)
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (rel) {
               var url = apkFromGiteeRelease(rel) || GITEE_APK_URL;
               setDownloadHref(url);
-            }
-            updatePlatformFromRelease(rel);
-          })
-          .catch(function () {});
-      });
+              updatePlatformFromRelease(rel);
+            })
+            .catch(function () {});
+        });
     })();
   </script>
 </body>
