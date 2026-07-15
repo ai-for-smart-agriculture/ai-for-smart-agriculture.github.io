@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta id="meta-desc" name="description" content="AFSA — smart agriculture app. Identify crops, manage orchards, download Android APK." />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta name="version" content="2026-07-12-v1" />
+  <meta name="version" content="2026-07-15-v1" />
   <title id="doc-title">AFSA — Smart Agriculture</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -697,7 +697,7 @@
           pull_cite: "AFSA Editorial · Field Notes",
           section_install: "Install",
           install_title: "How to install",
-          install_1: "Tap <strong>Download AFSA</strong>. GitHub public mirror first (no login); if unreachable, Gitee direct download is used.",
+          install_1: "Tap <strong>Download AFSA</strong>. Mainland China IPs use <strong>Gitee</strong>; others use the GitHub public mirror (no login). If the preferred link fails, the other is used automatically.",
           install_2: "Wait for <strong>AFSA.apk</strong> to finish (~41MB).",
           install_3: "<strong>Open the package</strong> from your download notification or file manager.",
           install_4: "If blocked as unknown source, allow <strong>install from this browser</strong> and retry.",
@@ -729,7 +729,7 @@
           pull_cite: "AFSA Editorial · 田野手记",
           section_install: "装帧说明 · Install",
           install_title: "如何安装",
-          install_1: "点击 <strong>「下载 AFSA」</strong>。优先从 GitHub 公开镜像直链下载（无需登录）；若访问不到则自动改用 Gitee。",
+          install_1: "点击 <strong>「下载 AFSA」</strong>。识别到中国大陆 IP 时走 <strong>Gitee</strong>，海外走 GitHub 公开镜像（无需登录）；首选不可用时自动切换。",
           install_2: "等待 <strong>AFSA.apk</strong> 下载完成（约 41MB）。",
           install_3: "在下载通知或文件管理中 <strong>打开安装包</strong>。",
           install_4: "若系统拦截「未知来源」，请允许 <strong>本浏览器安装应用</strong> 后重试。",
@@ -833,7 +833,7 @@
         updateLabel();
       })();
 
-      /* Download — public GitHub mirror APK, Gitee fallback */
+      /* Download — CN IP → Gitee; others → GitHub; timeout / failure → other mirror */
       var GITHUB_RELEASE_API =
         "https://api.github.com/repos/ai-for-smart-agriculture/afsa-android-releases/releases/latest";
       var GITHUB_APK_URL =
@@ -842,6 +842,8 @@
         "https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.2/AFSA.apk";
       var GITEE_RELEASE_API =
         "https://gitee.com/api/v5/repos/yhlkxkzs/afsa-android-release/releases/latest";
+      var GEO_TIMEOUT_MS = 3500;
+      var MIRROR_PROBE_MS = 4000;
 
       function setDownloadHref(url) {
         ["dl-main", "dl-main-card"].forEach(function (id) {
@@ -892,26 +894,67 @@
         return null;
       }
 
-      setDownloadHref(GITHUB_APK_URL);
+      function fetchWithTimeout(url, options, ms) {
+        var ctrl = new AbortController();
+        var timer = setTimeout(function () { ctrl.abort(); }, ms);
+        var opts = options ? Object.assign({}, options) : {};
+        opts.signal = ctrl.signal;
+        return fetch(url, opts).finally(function () { clearTimeout(timer); });
+      }
 
-      fetch(GITHUB_RELEASE_API, { headers: { Accept: "application/vnd.github+json" } })
-        .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error("github blocked")); })
-        .then(function (rel) {
-          var url = apkFromGithubRelease(rel);
-          if (url) setDownloadHref(url);
-          updatePlatformFromRelease(rel);
-        })
-        .catch(function () {
-          setDownloadHref(GITEE_APK_URL);
-          fetch(GITEE_RELEASE_API)
-            .then(function (r) { return r.ok ? r.json() : null; })
-            .then(function (rel) {
-              var url = apkFromGiteeRelease(rel) || GITEE_APK_URL;
-              setDownloadHref(url);
-              updatePlatformFromRelease(rel);
-            })
-            .catch(function () {});
-        });
+      /** @returns {Promise<"CN"|null>} */
+      function detectMainlandChina() {
+        return fetchWithTimeout("https://ipapi.co/json/", { headers: { Accept: "application/json" } }, GEO_TIMEOUT_MS)
+          .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+          .then(function (data) {
+            var code = (data && (data.country_code || data.country)) || "";
+            return String(code).toUpperCase() === "CN" ? "CN" : null;
+          })
+          .catch(function () {
+            return fetchWithTimeout("https://ipinfo.io/json", { headers: { Accept: "application/json" } }, GEO_TIMEOUT_MS)
+              .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+              .then(function (data) {
+                var code = (data && data.country) || "";
+                return String(code).toUpperCase() === "CN" ? "CN" : null;
+              })
+              .catch(function () { return null; });
+          });
+      }
+
+      function useGitee() {
+        setDownloadHref(GITEE_APK_URL);
+        return fetchWithTimeout(GITEE_RELEASE_API, null, MIRROR_PROBE_MS)
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (rel) {
+            var url = apkFromGiteeRelease(rel) || GITEE_APK_URL;
+            setDownloadHref(url);
+            updatePlatformFromRelease(rel);
+          })
+          .catch(function () {});
+      }
+
+      function useGithub() {
+        setDownloadHref(GITHUB_APK_URL);
+        return fetchWithTimeout(
+          GITHUB_RELEASE_API,
+          { headers: { Accept: "application/vnd.github+json" } },
+          MIRROR_PROBE_MS
+        )
+          .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error("github blocked")); })
+          .then(function (rel) {
+            var url = apkFromGithubRelease(rel);
+            if (url) setDownloadHref(url);
+            updatePlatformFromRelease(rel);
+          })
+          .catch(function () { return useGitee(); });
+      }
+
+      // Default before geo resolves; then CN → Gitee, else GitHub (with Gitee fallback).
+      setDownloadHref(GITHUB_APK_URL);
+      detectMainlandChina().then(function (cn) {
+        if (cn === "CN") return useGitee();
+        return useGithub();
+      });
     })();
   </script>
 </body>
