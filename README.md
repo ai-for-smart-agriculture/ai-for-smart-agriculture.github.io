@@ -8,7 +8,7 @@ Bilingual landing page for **AFSA — Smart Agriculture** (editorial / magazine 
 
 - English default; **中文** toggle in the header  
 - Hero image carousel  
-- **Download** — [GitHub public mirror APK](https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/download/v1.1.2/AFSA.apk) (no login); if GitHub is unreachable, falls back to [Gitee APK](https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.2/AFSA.apk)  
+- **Download** — Mainland China IPs → [Gitee APK](https://gitee.com/yhlkxkzs/afsa-android-release/releases/download/v1.1.2/AFSA.apk); others → [GitHub public mirror APK](https://github.com/ai-for-smart-agriculture/afsa-android-releases/releases/download/v1.1.2/AFSA.apk) (no login). Geo IP via ipapi.co / ipinfo.io; GitHub probe timeout falls back to Gitee.  
 
 ---
 
